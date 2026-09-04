@@ -1,0 +1,33 @@
+@model List<ReservationListItemViewModel>
+@{
+    ViewData["Title"] = "All Reservations";
+}
+
+<h1>All Reservations</h1>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Event</th>
+            <th>User</th>
+            <th>Reserved On</th>
+            <th>Notes</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td><a asp-controller="Events" asp-action="Details" asp-route-id="@r.EventId">@r.EventName</a></td>
+                <td>@r.UserFullName <small class="text-muted">(@r.UserEmail)</small></td>
+                <td>@r.ReservationDate.ToString("dd MMM yyyy, HH:mm")</td>
+                <td>@r.Notes</td>
+                <td>
+                    <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@r.Id">Details</a>
+                    <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@r.Id">Cancel</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

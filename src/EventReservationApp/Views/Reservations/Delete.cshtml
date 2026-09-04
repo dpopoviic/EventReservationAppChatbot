@@ -1,0 +1,22 @@
+@model ReservationListItemViewModel
+@{
+    ViewData["Title"] = "Cancel Reservation";
+}
+
+<h1>Cancel Reservation</h1>
+
+<div class="alert alert-warning">Are you sure you want to cancel this reservation?</div>
+
+<dl class="row">
+    <dt class="col-sm-2">Event</dt>
+    <dd class="col-sm-10">@Model.EventName</dd>
+    <dt class="col-sm-2">Reserved By</dt>
+    <dd class="col-sm-10">@Model.UserFullName (@Model.UserEmail)</dd>
+    <dt class="col-sm-2">Reserved On</dt>
+    <dd class="col-sm-10">@Model.ReservationDate.ToString("dd MMM yyyy, HH:mm")</dd>
+</dl>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <button type="submit" class="btn btn-danger">Yes, Cancel Reservation</button>
+    <a asp-action="Mine" class="btn btn-secondary">Back</a>
+</form>

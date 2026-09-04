@@ -1,0 +1,26 @@
+@model ReservationListItemViewModel
+@{
+    ViewData["Title"] = "Reservation Details";
+}
+
+<h1>Reservation Details</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">Event</dt>
+    <dd class="col-sm-10"><a asp-controller="Events" asp-action="Details" asp-route-id="@Model.EventId">@Model.EventName</a></dd>
+
+    <dt class="col-sm-2">Event Date</dt>
+    <dd class="col-sm-10">@Model.EventStartDate.ToString("dd MMM yyyy, HH:mm")</dd>
+
+    <dt class="col-sm-2">Reserved By</dt>
+    <dd class="col-sm-10">@Model.UserFullName (@Model.UserEmail)</dd>
+
+    <dt class="col-sm-2">Reserved On</dt>
+    <dd class="col-sm-10">@Model.ReservationDate.ToString("dd MMM yyyy, HH:mm")</dd>
+
+    <dt class="col-sm-2">Notes</dt>
+    <dd class="col-sm-10">@Model.Notes</dd>
+</dl>
+
+<a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model.Id">Cancel Reservation</a>
+<a asp-action="Mine" class="btn btn-secondary">Back</a>

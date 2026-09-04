@@ -1,0 +1,58 @@
+@model EventListItemViewModel
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<h1>@Model.Name</h1>
+<dl class="row">
+    <dt class="col-sm-2">Location</dt>
+    <dd class="col-sm-10">@Model.Location</dd>
+
+    <dt class="col-sm-2">Starts</dt>
+    <dd class="col-sm-10">@Model.StartDate.ToString("dd MMM yyyy, HH:mm")</dd>
+
+    <dt class="col-sm-2">Ends</dt>
+    <dd class="col-sm-10">@Model.EndDate.ToString("dd MMM yyyy, HH:mm")</dd>
+
+    <dt class="col-sm-2">Capacity</dt>
+    <dd class="col-sm-10">
+        @Model.ReservedCount / @Model.Capacity reserved
+        @if (Model.IsFull)
+        {
+            <span class="badge bg-secondary ms-2">Full</span>
+        }
+    </dd>
+
+    <dt class="col-sm-2">Description</dt>
+    <dd class="col-sm-10">@Model.Description</dd>
+</dl>
+
+<div class="mb-3">
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        @if (Model.CurrentUserHasReservation)
+        {
+            <span class="badge bg-info">You already have a reservation for this event.</span>
+        }
+        else if (Model.IsFull)
+        {
+            <button class="btn btn-secondary" disabled>Event Full</button>
+        }
+        else
+        {
+            <a class="btn btn-success" asp-controller="Reservations" asp-action="Create" asp-route-eventId="@Model.Id">Reserve a Spot</a>
+        }
+    }
+    else
+    {
+        <a class="btn btn-success" asp-area="Identity" asp-page="/Account/Login">Login to Reserve a Spot</a>
+    }
+
+    @if (User.IsInRole("Administrator"))
+    {
+        <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+    }
+</div>
+
+<a asp-action="Index">Back to list</a>

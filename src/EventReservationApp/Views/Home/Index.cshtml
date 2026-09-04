@@ -1,0 +1,49 @@
+@model List<EventListItemViewModel>
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="p-5 mb-4 bg-light rounded-3">
+    <div class="container-fluid py-3">
+        <h1 class="display-6 fw-bold">Welcome to the Event Reservation App</h1>
+        <p class="fs-5">
+            A base ASP.NET Core MVC reference project featuring EF Core, Identity, role-based
+            authorization and a chatbot placeholder ready for future AI integration.
+        </p>
+        <a class="btn btn-primary btn-lg" asp-controller="Events" asp-action="Index">Browse Events</a>
+    </div>
+</div>
+
+<h2>Upcoming Events</h2>
+@if (!Model.Any())
+{
+    <p class="text-muted">No events available yet.</p>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var e in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@e.Name</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@e.Location</h6>
+                        <p class="card-text">@e.StartDate.ToString("dd MMM yyyy, HH:mm")</p>
+                        <p class="card-text">
+                            @if (e.IsFull)
+                            {
+                                <span class="badge bg-secondary">Full</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">@e.SpotsRemaining spots left</span>
+                            }
+                        </p>
+                        <a class="btn btn-outline-primary" asp-controller="Events" asp-action="Details" asp-route-id="@e.Id">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

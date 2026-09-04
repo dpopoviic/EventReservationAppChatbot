@@ -1,0 +1,94 @@
+@{
+    ViewData["Title"] = "Chatbot";
+}
+
+<h1>AI korisnička podrška</h1>
+<p class="text-muted">
+    Postavite pitanje ispod. Chatbot će odgovoriti na vaša pitanja. Ukoliko nije moguće 
+    pronaći odgovor u bazi znanja, kontaktirajte nas direktno putem telefona ili mejla.
+</p>
+
+<form id="antiforgeryForm">
+    @Html.AntiForgeryToken()
+</form>
+
+<div class="card" style="max-width: 700px;">
+    <div class="card-body">
+        <div id="chatWindow" class="border rounded p-3 mb-3 bg-light" style="height: 400px; overflow-y: auto;">
+            <div class="chat-message chat-assistant mb-2">
+                <span class="badge bg-secondary">Asistent</span>
+                <div>Zdravo! Ja sam Vaš asistent. Kako vam mogu pomoći?</div>
+            </div>
+        </div>
+
+        <form id="chatForm" class="d-flex gap-2">
+            <input id="chatInput" type="text" class="form-control" placeholder="Type your message..." autocomplete="off" required />
+            <button id="chatSendButton" type="submit" class="btn btn-primary">Send</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const chatWindow = document.getElementById('chatWindow');
+            const chatForm = document.getElementById('chatForm');
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('chatSendButton');
+            const token = document.querySelector('#antiforgeryForm input[name="__RequestVerificationToken"]').value;
+
+            function appendMessage(sender, text) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'chat-message chat-' + sender + ' mb-2';
+
+                const badge = document.createElement('span');
+                badge.className = 'badge ' + (sender === 'user' ? 'bg-primary' : 'bg-secondary');
+                badge.textContent = sender === 'user' ? 'You' : 'Asistent';
+
+                const body = document.createElement('div');
+                body.textContent = text;
+
+                wrapper.appendChild(badge);
+                wrapper.appendChild(body);
+                chatWindow.appendChild(wrapper);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+
+            chatForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const message = chatInput.value.trim();
+                if (!message) {
+                    return;
+                }
+
+                appendMessage('user', message);
+                chatInput.value = '';
+                sendButton.disabled = true;
+
+                try {
+                    const response = await fetch('@Url.Action("Send", "Chatbot")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': token
+                        },
+                        body: JSON.stringify({ message: message })
+                    });
+
+                    if (!response.ok) {
+                        appendMessage('assistant', 'Došlo je do problema prilikom komunikacije s chatbotom. Molimo pokušajte ponovo kasnije.');
+                        return;
+                    }
+
+                    const data = await response.json();
+                    appendMessage('assistant', data.reply);
+                } catch (err) {
+                    appendMessage('assistant', 'Došlo je do problema prilikom komunikacije s chatbotom. Molimo pokušajte ponovo kasnije.');
+                } finally {
+                    sendButton.disabled = false;
+                    chatInput.focus();
+                }
+            });
+        })();
+    </script>
+}

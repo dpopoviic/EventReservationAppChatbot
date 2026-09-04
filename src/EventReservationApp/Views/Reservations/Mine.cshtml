@@ -1,0 +1,39 @@
+@model List<ReservationListItemViewModel>
+@{
+    ViewData["Title"] = "My Reservations";
+}
+
+<h1>My Reservations</h1>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">You have no reservations yet. <a asp-controller="Events" asp-action="Index">Browse events</a> to make one.</p>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Event Date</th>
+                <th>Reserved On</th>
+                <th>Notes</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td><a asp-controller="Events" asp-action="Details" asp-route-id="@r.EventId">@r.EventName</a></td>
+                    <td>@r.EventStartDate.ToString("dd MMM yyyy, HH:mm")</td>
+                    <td>@r.ReservationDate.ToString("dd MMM yyyy, HH:mm")</td>
+                    <td>@r.Notes</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@r.Id">Cancel</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

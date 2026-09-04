@@ -1,0 +1,44 @@
+@model List<UserListItemViewModel>
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<h1>Manage Users</h1>
+<p class="text-muted">New users register themselves via the standard <a asp-area="Identity" asp-page="/Account/Register">registration page</a>. This screen lets administrators manage roles and profiles.</p>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Roles</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.Email</td>
+                <td>@u.FirstName @u.LastName</td>
+                <td>@string.Join(", ", u.Roles)</td>
+                <td>
+                    @if (u.LockedOut)
+                    {
+                        <span class="badge bg-secondary">Locked Out</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@u.Id">Details</a>
+                    <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@u.Id">Edit</a>
+                    <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@u.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

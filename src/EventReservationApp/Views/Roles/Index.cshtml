@@ -1,0 +1,32 @@
+@model List<RoleListItemViewModel>
+@{
+    ViewData["Title"] = "Manage Roles";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Manage Roles</h1>
+    <a class="btn btn-primary" asp-action="Create">Create Role</a>
+</div>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Users</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.Name</td>
+                <td>@r.UserCount</td>
+                <td>
+                    <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@r.Id">Edit</a>
+                    <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@r.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
