@@ -52,7 +52,7 @@
           "dependencies": {
             "Azure.AI.Projects": {
               "target": "Package",
-              "version": "[2.0.1, )"
+              "version": "[3.0.0-beta.2, )"
             },
             "Azure.Identity": {
               "target": "Package",
@@ -60,7 +60,7 @@
             },
             "Microsoft.Agents.AI.Foundry": {
               "target": "Package",
-              "version": "[1.5.0, )"
+              "version": "[1.20.0-preview.260831.1, )"
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",

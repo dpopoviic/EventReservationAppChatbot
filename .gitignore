@@ -1,0 +1,71 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+Any CPU/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / VS Code
+.idea/
+.vscode/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+
+# Publish output
+publish/
+*.publishsettings
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Generated files
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlog
+*.tmp
+*.tmp_proj
+*.vspscc
+*.vssscc
+.builds
+
+# Test results / coverage
+TestResults/
+*.trx
+coverage/
+*.coverage
+*.coveragexml
+
+# Local secrets / environment
+appsettings.Development.json
+.env
+.env.*
+secrets.json
