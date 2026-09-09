@@ -359,6 +359,7 @@ C:\Users\FON\Documents\DraganaPopovic\RAG i LLM\integrisano\EventReservationApp\
 C:\Users\FON\Documents\DraganaPopovic\RAG i LLM\integrisano\EventReservationApp\EventReservationApp\src\EventReservationApp\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\FON\Documents\DraganaPopovic\RAG i LLM\integrisano\EventReservationApp\EventReservationApp\src\EventReservationApp\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\FON\Documents\DraganaPopovic\RAG i LLM\integrisano\EventReservationApp\EventReservationApp\src\EventReservationApp\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+C:\Users\FON\Documents\DraganaPopovic\RAG i LLM\integrisano\EventReservationApp\EventReservationApp\src\EventReservationApp\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\FON\Documents\DraganaPopovic\RAG i LLM\integrisano\EventReservationApp\EventReservationApp\src\EventReservationApp\obj\Debug\net9.0\EventRes.B749431D.Up2Date
 C:\Users\FON\Documents\DraganaPopovic\RAG i LLM\integrisano\EventReservationApp\EventReservationApp\src\EventReservationApp\obj\Debug\net9.0\EventReservationApp.dll
 C:\Users\FON\Documents\DraganaPopovic\RAG i LLM\integrisano\EventReservationApp\EventReservationApp\src\EventReservationApp\obj\Debug\net9.0\refint\EventReservationApp.dll

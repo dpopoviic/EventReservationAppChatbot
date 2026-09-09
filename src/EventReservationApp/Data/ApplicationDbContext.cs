@@ -20,6 +20,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public DbSet<Event> Events { get; set; } = null!;
 
     public DbSet<EventReservation> EventReservations { get; set; } = null!;
+    public DbSet<ChatConversation> ChatConversations { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -61,6 +62,29 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
 
             // A user can only reserve a given event once.
             entity.HasIndex(r => new { r.UserId, r.EventId }).IsUnique();
+        });
+        builder.Entity<ChatConversation>(entity =>
+        {
+            entity.ToTable("ChatConversations");
+
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.UserId)
+                .IsRequired()
+                .HasMaxLength(450);
+
+            entity.Property(x => x.FoundryConversationId)
+                .IsRequired()
+                .HasMaxLength(200);
+
+            entity.Property(x => x.CreatedAtUtc)
+                .IsRequired();
+
+            entity.Property(x => x.UpdatedAtUtc)
+                .IsRequired();
+
+            entity.HasIndex(x => x.UserId)
+                .IsUnique();
         });
     }
 }

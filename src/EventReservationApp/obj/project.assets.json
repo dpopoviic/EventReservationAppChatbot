@@ -2,11 +2,11 @@
   "version": 3,
   "targets": {
     "net9.0": {
-      "Azure.AI.Extensions.OpenAI/3.0.0-beta.2": {
+      "Azure.AI.Extensions.OpenAI/2.1.0-beta.4": {
         "type": "package",
         "dependencies": {
-          "Azure.Core": "1.62.0",
-          "OpenAI": "2.12.0"
+          "Azure.Core": "1.60.0",
+          "OpenAI": "2.9.1"
         },
         "compile": {
           "lib/net8.0/Azure.AI.Extensions.OpenAI.dll": {
@@ -19,12 +19,12 @@
           }
         }
       },
-      "Azure.AI.Projects/3.0.0-beta.2": {
+      "Azure.AI.Projects/2.1.0-beta.4": {
         "type": "package",
         "dependencies": {
-          "Azure.AI.Extensions.OpenAI": "3.0.0-beta.2",
-          "Azure.AI.Projects.Agents": "3.0.0-beta.2",
-          "Azure.Core": "1.62.0",
+          "Azure.AI.Extensions.OpenAI": "2.1.0-beta.4",
+          "Azure.AI.Projects.Agents": "2.1.0-beta.4",
+          "Azure.Core": "1.60.0",
           "Azure.Storage.Blobs": "12.26.0"
         },
         "compile": {
@@ -41,11 +41,11 @@
           "buildTransitive/net8.0/Azure.AI.Projects.targets": {}
         }
       },
-      "Azure.AI.Projects.Agents/3.0.0-beta.2": {
+      "Azure.AI.Projects.Agents/2.1.0-beta.4": {
         "type": "package",
         "dependencies": {
-          "Azure.Core": "1.62.0",
-          "OpenAI": "2.12.0"
+          "Azure.Core": "1.60.0",
+          "OpenAI": "2.9.1"
         },
         "compile": {
           "lib/net8.0/Azure.AI.Projects.Agents.dll": {
@@ -2744,10 +2744,10 @@
           "lib/netstandard2.0/NuGet.Versioning.dll": {}
         }
       },
-      "OpenAI/2.12.0": {
+      "OpenAI/2.10.0": {
         "type": "package",
         "dependencies": {
-          "System.ClientModel": "1.14.0",
+          "System.ClientModel": "1.10.0",
           "System.Net.ServerSentEvents": "10.0.2"
         },
         "compile": {
@@ -3415,16 +3415,16 @@
     }
   },
   "libraries": {
-    "Azure.AI.Extensions.OpenAI/3.0.0-beta.2": {
-      "sha512": "1f1KwEpfAKfstu9C31j/5wn518Q0Mdyb2zpIZrZ4WSxbKekuvZ6I3rgXRRFU9zsrO3TeCBw/dwvfF9eRhD1vUw==",
+    "Azure.AI.Extensions.OpenAI/2.1.0-beta.4": {
+      "sha512": "xMIuUl2BptpztVGlLt3YTS0JVSlD+h5cmUShQaeqT84jKbIcgbuJZ0btrAzyxPGAJJ7UcljHqn9kEOPxKSRCtA==",
       "type": "package",
-      "path": "azure.ai.extensions.openai/3.0.0-beta.2",
+      "path": "azure.ai.extensions.openai/2.1.0-beta.4",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "CHANGELOG.md",
         "README.md",
-        "azure.ai.extensions.openai.3.0.0-beta.2.nupkg.sha512",
+        "azure.ai.extensions.openai.2.1.0-beta.4.nupkg.sha512",
         "azure.ai.extensions.openai.nuspec",
         "azureicon.png",
         "lib/net10.0/Azure.AI.Extensions.OpenAI.dll",
@@ -3435,17 +3435,17 @@
         "lib/netstandard2.0/Azure.AI.Extensions.OpenAI.xml"
       ]
     },
-    "Azure.AI.Projects/3.0.0-beta.2": {
-      "sha512": "ZCp3brXVknuUhsqPhtSFn6jCrGjEWvi8pcUoXQ2rGmcB84/UMoGcDElDpzDlhEAMSHvGs1mqeX0eY5/uX5HUZw==",
+    "Azure.AI.Projects/2.1.0-beta.4": {
+      "sha512": "Ya+hSOgn+5MjslRWqcSyzAfYvpzlX+T7kcgAYZC0t73Vwwu1ksRbeSqgzBY/4mHlU4pxM4F0klAqs2ho8+87SQ==",
       "type": "package",
-      "path": "azure.ai.projects/3.0.0-beta.2",
+      "path": "azure.ai.projects/2.1.0-beta.4",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "CHANGELOG.md",
         "ConfigurationSchema.json",
         "README.md",
-        "azure.ai.projects.3.0.0-beta.2.nupkg.sha512",
+        "azure.ai.projects.2.1.0-beta.4.nupkg.sha512",
         "azure.ai.projects.nuspec",
         "azureicon.png",
         "buildTransitive/net10.0/Azure.AI.Projects.targets",
@@ -3459,17 +3459,17 @@
         "lib/netstandard2.0/Azure.AI.Projects.xml"
       ]
     },
-    "Azure.AI.Projects.Agents/3.0.0-beta.2": {
-      "sha512": "fcN0haWvxH8eeie/QWqlMrFiW0Ty+voFMao6xSAOm1MQizQ4LfWbRbvCGhauFIWzCfzBoEi9QWXFfvihy63BIA==",
+    "Azure.AI.Projects.Agents/2.1.0-beta.4": {
+      "sha512": "eMm/JMWHy/wtOfLaJ/Ul1lQY9MUDeHjYuOip3/CHXpo/Knjv66DOoMuLRpQ4CU5z2opc7O7w8ocmmoVoMAgkvw==",
       "type": "package",
-      "path": "azure.ai.projects.agents/3.0.0-beta.2",
+      "path": "azure.ai.projects.agents/2.1.0-beta.4",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "CHANGELOG.md",
         "ConfigurationSchema.json",
         "README.md",
-        "azure.ai.projects.agents.3.0.0-beta.2.nupkg.sha512",
+        "azure.ai.projects.agents.2.1.0-beta.4.nupkg.sha512",
         "azure.ai.projects.agents.nuspec",
         "azureicon.png",
         "buildTransitive/net10.0/Azure.AI.Projects.Agents.targets",
@@ -7773,10 +7773,10 @@
         "nuget.versioning.nuspec"
       ]
     },
-    "OpenAI/2.12.0": {
-      "sha512": "rKyVV0sJPo7pn0Ya5dgRs5ggGbjvnKcYSvYV2jITKgFIfeo2XHjgyi6UqNT/OnF0YBqjsNpPdgM6QjzYczWplg==",
+    "OpenAI/2.10.0": {
+      "sha512": "e5gAhMDcX5bFmmtR+lT6qZxJoaGb0SkIplPUUdKwcC4xerCh471hTIsrvfkou7scfZD9YQk6C06dP3NwBqHw1A==",
       "type": "package",
-      "path": "openai/2.12.0",
+      "path": "openai/2.10.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -7791,7 +7791,7 @@
         "lib/net8.0/OpenAI.xml",
         "lib/netstandard2.0/OpenAI.dll",
         "lib/netstandard2.0/OpenAI.xml",
-        "openai.2.12.0.nupkg.sha512",
+        "openai.2.10.0.nupkg.sha512",
         "openai.nuspec"
       ]
     },
@@ -9049,7 +9049,7 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "Azure.AI.Projects >= 3.0.0-beta.2",
+      "Azure.AI.Projects >= 2.1.0-beta.4",
       "Azure.Identity >= 1.21.0",
       "Microsoft.Agents.AI.Foundry >= 1.20.0-preview.260831.1",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 9.0.0",
@@ -9112,7 +9112,7 @@
         "dependencies": {
           "Azure.AI.Projects": {
             "target": "Package",
-            "version": "[3.0.0-beta.2, )"
+            "version": "[2.1.0-beta.4, )"
           },
           "Azure.Identity": {
             "target": "Package",

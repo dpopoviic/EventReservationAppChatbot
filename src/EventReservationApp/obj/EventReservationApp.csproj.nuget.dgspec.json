@@ -52,7 +52,7 @@
           "dependencies": {
             "Azure.AI.Projects": {
               "target": "Package",
-              "version": "[3.0.0-beta.2, )"
+              "version": "[2.1.0-beta.4, )"
             },
             "Azure.Identity": {
               "target": "Package",
