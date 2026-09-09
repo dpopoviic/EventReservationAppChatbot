@@ -58,7 +58,7 @@ builder.Services.AddScoped<IRoleManagementService, RoleManagementService>();
 // no-AI placeholder, swap this line for:
 //   builder.Services.AddScoped<IChatbotService, PlaceholderChatbotService>();
 builder.Services.AddSingleton<IChatbotService, FoundryChatbotService>();
-
+builder.Services.AddScoped<IChatbotConversationService, FoundryChatbotConversationService>();
 // ---------------------------------------------------------------------
 // MVC + Razor Pages (Razor Pages are required by the default Identity UI)
 // ---------------------------------------------------------------------
