@@ -154,13 +154,6 @@ public class FoundryChatbotConversationService : IChatbotConversationService
         }
         catch (DbUpdateException)
         {
-            /*
-            * Another simultaneous request for the same user
-            * may have created the conversation first.
-            *
-            * The unique index on UserId protects the database.
-            */
-
             var alreadyCreated =
                 await _db.ChatConversations
                     .SingleOrDefaultAsync(

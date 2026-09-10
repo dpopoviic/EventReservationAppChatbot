@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\FON\\Documents\\DraganaPopovic\\RAG i LLM\\integrisano\\EventReservationApp\\EventReservationApp\\src\\EventReservationApp\\EventReservationApp.csproj": {}
+    "D:\\Posao\\foundry\\org\\EventReservationAppChatbot\\src\\EventReservationApp\\EventReservationApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\FON\\Documents\\DraganaPopovic\\RAG i LLM\\integrisano\\EventReservationApp\\EventReservationApp\\src\\EventReservationApp\\EventReservationApp.csproj": {
+    "D:\\Posao\\foundry\\org\\EventReservationAppChatbot\\src\\EventReservationApp\\EventReservationApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\FON\\Documents\\DraganaPopovic\\RAG i LLM\\integrisano\\EventReservationApp\\EventReservationApp\\src\\EventReservationApp\\EventReservationApp.csproj",
+        "projectUniqueName": "D:\\Posao\\foundry\\org\\EventReservationAppChatbot\\src\\EventReservationApp\\EventReservationApp.csproj",
         "projectName": "EventReservationApp",
-        "projectPath": "C:\\Users\\FON\\Documents\\DraganaPopovic\\RAG i LLM\\integrisano\\EventReservationApp\\EventReservationApp\\src\\EventReservationApp\\EventReservationApp.csproj",
-        "packagesPath": "C:\\Users\\FON\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\FON\\Documents\\DraganaPopovic\\RAG i LLM\\integrisano\\EventReservationApp\\EventReservationApp\\src\\EventReservationApp\\obj\\",
+        "projectPath": "D:\\Posao\\foundry\\org\\EventReservationAppChatbot\\src\\EventReservationApp\\EventReservationApp.csproj",
+        "packagesPath": "C:\\Users\\popov\\.nuget\\packages\\",
+        "outputPath": "D:\\Posao\\foundry\\org\\EventReservationAppChatbot\\src\\EventReservationApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\FON\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\popov\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -110,7 +110,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.314/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
