@@ -47,6 +47,12 @@ builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<IRoleManagementService, RoleManagementService>();
 
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+
+builder.Services.AddScoped<IEventCatalogService, EventCatalogService>();
+builder.Services.AddScoped<IMyReservationsService, MyReservationsService>();
 // Chatbot service is intentionally isolated behind an interface so the AI
 // provider can be swapped without touching the controller or views. See
 // Services/Interfaces/IChatbotService.cs.
