@@ -1,9 +1,11 @@
 using EventReservationApp.Data;
+using EventReservationApp.Mcp.Tools;
 using EventReservationApp.Models.Entities;
 using EventReservationApp.Services.Implementations;
 using EventReservationApp.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ModelContextProtocol.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +73,37 @@ builder.Services.AddScoped<IChatbotConversationService, FoundryChatbotConversati
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+// ---------------------------------------------------------------------
+// MCP server (Model Context Protocol) - exposes exactly three tools
+// (SearchEvents, ManageMyReservations, GetEventAvailability) that call the
+// same application services as the rest of the app. See Mcp/Tools/*.
+//
+// Identity: the cookie scheme above (from AddDefaultIdentity) authenticates
+// the MVC site as before and stays the default scheme, unchanged. The MCP
+// endpoint additionally accepts ASP.NET Core Identity's built-in bearer
+// token scheme, because a remote MCP client (an agent orchestrator, not a
+// browser) cannot carry a login cookie. A bearer token still resolves to
+// the same authenticated ApplicationUser/ClaimsPrincipal via the framework's
+// own token validation - there is no custom header and no way for a caller
+// to supply a user id itself. See POST /mcp/token below for how a
+// cookie-authenticated user obtains one of these tokens, and the delivered
+// write-up for what changes if/when this is connected to Foundry.
+builder.Services.AddAuthentication()
+    .AddBearerToken(IdentityConstants.BearerScheme);
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Mcp", policy => policy
+        .AddAuthenticationSchemes(IdentityConstants.BearerScheme)
+        .RequireAuthenticatedUser());
+});
+
+builder.Services.AddMcpServer()
+    .WithHttpTransport(options => options.SessionMode = HttpServerSessionMode.Stateless)
+    .WithTools<SearchEventsTool>()
+    .WithTools<ManageMyReservationsTool>()
+    .WithTools<GetEventAvailabilityTool>();
+
 // The chatbot page posts messages via fetch(); configure the antiforgery
 // header name so its JavaScript can send the token explicitly (see
 // Views/Chatbot/Index.cshtml).
@@ -104,6 +137,38 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
+
+// ---------------------------------------------------------------------
+// MCP endpoint - protected by the "Mcp" (bearer-token) policy configured
+// above. Never reachable anonymously and never reachable via the cookie
+// scheme alone, so a caller cannot get in just by having a browser session
+// open; it must present a bearer token minted for a specific user.
+// ---------------------------------------------------------------------
+app.MapMcp("/mcp").RequireAuthorization("Mcp");
+
+// Lets an already browser-authenticated (cookie) user mint a bearer token
+// for their OWN identity, to hand to a separate MCP client. The user is
+// read from the existing authenticated HttpContext - exactly like every
+// other authenticated action in this app - never from anything the caller
+// passes in. This is a minimal, self-issued stand-in for a real OAuth
+// authorization server; see the delivered write-up for what a genuine
+// Foundry "OAuth identity passthrough" connection would additionally
+// require.
+app.MapPost("/mcp/token", async (
+    HttpContext httpContext,
+    UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> signInManager) =>
+{
+    var user = await userManager.GetUserAsync(httpContext.User);
+    if (user is null)
+    {
+        return Results.Unauthorized();
+    }
+
+    var principal = await signInManager.CreateUserPrincipalAsync(user);
+    return Results.SignIn(principal, authenticationScheme: IdentityConstants.BearerScheme);
+})
+.RequireAuthorization();
 
 // ---------------------------------------------------------------------
 // Seed database (roles, example users, events, reservations)

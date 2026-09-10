@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EventReservationApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2fcd7277653b94d40ba68d903aca54c078f83b33")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aa4dd4e9ca318b8cc1c52d374d9525b9665325e4")]
 [assembly: System.Reflection.AssemblyProductAttribute("EventReservationApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EventReservationApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

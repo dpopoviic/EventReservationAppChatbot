@@ -727,10 +727,12 @@ D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\obj\Debu
 D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\obj\Debug\net9.0\staticwebassets.build.json.cache
 D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\obj\Debug\net9.0\staticwebassets.development.json
 D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\obj\Debug\net9.0\EventRes.B749431D.Up2Date
 D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\obj\Debug\net9.0\EventReservationApp.dll
 D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\obj\Debug\net9.0\refint\EventReservationApp.dll
 D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\obj\Debug\net9.0\EventReservationApp.pdb
 D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\obj\Debug\net9.0\EventReservationApp.genruntimeconfig.cache
 D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\obj\Debug\net9.0\ref\EventReservationApp.dll
+D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\bin\Debug\net9.0\ModelContextProtocol.dll
+D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\bin\Debug\net9.0\ModelContextProtocol.AspNetCore.dll
+D:\Posao\foundry\org\EventReservationAppChatbot\src\EventReservationApp\bin\Debug\net9.0\ModelContextProtocol.Core.dll

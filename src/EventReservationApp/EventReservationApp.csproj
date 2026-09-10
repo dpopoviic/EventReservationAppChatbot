@@ -30,6 +30,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+
+    <!-- MCP server: exposes SearchEvents / ManageMyReservations / GetEventAvailability
+         as MCP tools over the current officially supported .NET MCP transport (Streamable
+         HTTP, ASP.NET Core hosting). See Mcp/Tools and Program.cs. -->
+    <PackageReference Include="ModelContextProtocol.AspNetCore" Version="2.2.0" />
   </ItemGroup>
 
 </Project>

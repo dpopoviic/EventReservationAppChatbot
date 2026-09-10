@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "NW1fYx7LZRU=",
+  "dgSpecHash": "VllFrJLi+oU=",
   "success": true,
   "projectFilePath": "D:\\Posao\\foundry\\org\\EventReservationAppChatbot\\src\\EventReservationApp\\EventReservationApp.csproj",
   "expectedPackageFiles": [
@@ -142,6 +142,9 @@
     "C:\\Users\\popov\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.templating\\9.0.0\\microsoft.visualstudio.web.codegeneration.templating.9.0.0.nupkg.sha512",
     "C:\\Users\\popov\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.utils\\9.0.0\\microsoft.visualstudio.web.codegeneration.utils.9.0.0.nupkg.sha512",
     "C:\\Users\\popov\\.nuget\\packages\\microsoft.visualstudio.web.codegenerators.mvc\\9.0.0\\microsoft.visualstudio.web.codegenerators.mvc.9.0.0.nupkg.sha512",
+    "C:\\Users\\popov\\.nuget\\packages\\modelcontextprotocol\\2.2.0\\modelcontextprotocol.2.2.0.nupkg.sha512",
+    "C:\\Users\\popov\\.nuget\\packages\\modelcontextprotocol.aspnetcore\\2.2.0\\modelcontextprotocol.aspnetcore.2.2.0.nupkg.sha512",
+    "C:\\Users\\popov\\.nuget\\packages\\modelcontextprotocol.core\\2.2.0\\modelcontextprotocol.core.2.2.0.nupkg.sha512",
     "C:\\Users\\popov\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",
     "C:\\Users\\popov\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\popov\\.nuget\\packages\\nuget.common\\6.11.0\\nuget.common.6.11.0.nupkg.sha512",
