@@ -1,4 +1,5 @@
 using EventReservationApp.Data;
+using EventReservationApp.Mcp.Authentication;
 using EventReservationApp.Mcp.Tools;
 using EventReservationApp.Models.Entities;
 using EventReservationApp.Services.Implementations;
@@ -88,13 +89,21 @@ builder.Services.AddRazorPages();
 // to supply a user id itself. See POST /mcp/token below for how a
 // cookie-authenticated user obtains one of these tokens, and the delivered
 // write-up for what changes if/when this is connected to Foundry.
+//
+// PHASE 1 / TEMPORARY: also accepts a static service credential (an
+// "X-Mcp-Service-Key" header, see McpServiceKeyAuthenticationHandler) so
+// Foundry Agent Service can call the MCP endpoint with one shared secret
+// ahead of real per-user OAuth being wired up. Unlike the bearer scheme,
+// this never resolves to a specific user - see the handler for details.
 builder.Services.AddAuthentication()
-    .AddBearerToken(IdentityConstants.BearerScheme);
+    .AddBearerToken(IdentityConstants.BearerScheme)
+    .AddScheme<McpServiceKeyAuthenticationOptions, McpServiceKeyAuthenticationHandler>(
+        McpServiceKeyDefaults.AuthenticationScheme, options => { });
 
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Mcp", policy => policy
-        .AddAuthenticationSchemes(IdentityConstants.BearerScheme)
+        .AddAuthenticationSchemes(IdentityConstants.BearerScheme, McpServiceKeyDefaults.AuthenticationScheme)
         .RequireAuthenticatedUser());
 });
 
@@ -139,10 +148,11 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 // ---------------------------------------------------------------------
-// MCP endpoint - protected by the "Mcp" (bearer-token) policy configured
-// above. Never reachable anonymously and never reachable via the cookie
-// scheme alone, so a caller cannot get in just by having a browser session
-// open; it must present a bearer token minted for a specific user.
+// MCP endpoint - protected by the "Mcp" policy configured above, which
+// accepts either the per-user bearer-token scheme or the temporary
+// service-key scheme. Never reachable anonymously and never reachable via
+// the cookie scheme alone, so a caller cannot get in just by having a
+// browser session open.
 // ---------------------------------------------------------------------
 app.MapMcp("/mcp").RequireAuthorization("Mcp");
 

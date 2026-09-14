@@ -153,6 +153,27 @@ public class ManageMyReservationsToolTests
         Assert.DoesNotContain("Exception", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
+    [Theory]
+    [InlineData("list")]
+    [InlineData("reserve")]
+    [InlineData("cancel")]
+    public async Task ServiceKeyAuthenticatedCaller_IsRejectedWithControlledError_ForEveryOperation(string operation)
+    {
+        // A caller authenticated only via the Phase-1 MCP service key (see
+        // McpServiceKeyAuthenticationHandler) is "authenticated" for policy
+        // purposes but resolves to no user id - FakeCurrentUser.Service() mirrors
+        // exactly what the real CurrentUser reports in that case. This must be
+        // rejected the same way an anonymous caller is, with no special-casing
+        // inside the tool itself.
+        await using var db = InMemoryDbContextFactory.Create();
+        var tool = CreateTool(db, FakeCurrentUser.Service());
+
+        var ex = await Assert.ThrowsAsync<McpException>(
+            () => tool.ManageMyReservations(operation: operation, eventId: 1, reservationId: 1));
+
+        Assert.Equal("You must be signed in to manage reservations.", ex.Message);
+    }
+
     [Fact]
     public void ToolMethod_HasNoUserIdParameter_IdentityCanOnlyComeFromTheAuthenticatedRequest()
     {

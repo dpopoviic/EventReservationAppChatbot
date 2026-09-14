@@ -6,6 +6,7 @@ using EventReservationApp.Services.Implementations;
 using Microsoft.Agents.AI;
 using Microsoft.Agents.AI.Foundry;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.AI;
 
 public class FoundryChatbotConversationService : IChatbotConversationService
 { 
@@ -81,6 +82,8 @@ public class FoundryChatbotConversationService : IChatbotConversationService
                     message,
                     session);
 
+            response = await ResolveToolApprovalsAsync(agent, session, response, cancellationToken);
+
             conversation.UpdatedAtUtc = DateTime.UtcNow;
 
             await _db.SaveChangesAsync(cancellationToken);
@@ -108,6 +111,64 @@ public class FoundryChatbotConversationService : IChatbotConversationService
             };
         }
     }
+    /// <summary>
+    /// MCP tool calls on the connected Foundry agent are configured with
+    /// require_approval - every call comes back as a pending
+    /// <see cref="ToolApprovalRequestContent"/> instead of a result until the
+    /// caller answers it. This is a backend chatbot with no human reviewer on
+    /// this leg of the conversation, so every pending request is auto-approved
+    /// here and the run is resubmitted on the same session until no approval
+    /// requests remain. This is safe to do blindly: it only ever proves "this
+    /// really is our Foundry agent calling", the tools themselves still enforce
+    /// their own authorization independently (see ManageMyReservationsTool,
+    /// which resolves identity solely from the authenticated request and will
+    /// refuse to act - approved or not - when called through a connection that
+    /// carries no signed-in user, exactly the case here).
+    /// </summary>
+    private async Task<AgentResponse> ResolveToolApprovalsAsync(
+        FoundryAgent agent,
+        AgentSession session,
+        AgentResponse response,
+        CancellationToken cancellationToken)
+    {
+        const int maxApprovalRounds = 5;
+
+        for (var round = 0; round < maxApprovalRounds; round++)
+        {
+            var pendingApprovals = response.Messages
+                .SelectMany(m => m.Contents)
+                .OfType<ToolApprovalRequestContent>()
+                .ToList();
+
+            if (pendingApprovals.Count == 0)
+            {
+                return response;
+            }
+
+            foreach (var pending in pendingApprovals)
+            {
+                _logger.LogInformation(
+                    "Auto-approving MCP tool call {CallId} ({ToolCallType}).",
+                    pending.ToolCall.CallId,
+                    pending.ToolCall.GetType().Name);
+            }
+
+            var approvalContents = pendingApprovals
+                .Select(pending => (AIContent)pending.CreateResponse(approved: true, reason: "Auto-approved by backend chatbot."))
+                .ToList();
+
+            var approvalMessage = new ChatMessage(ChatRole.Tool, approvalContents);
+
+            response = await agent.RunAsync(approvalMessage, session, cancellationToken: cancellationToken);
+        }
+
+        _logger.LogError(
+            "MCP tool approval loop did not resolve after {MaxRounds} rounds; returning the last response as-is.",
+            maxApprovalRounds);
+
+        return response;
+    }
+
     private async Task<ChatConversation> GetOrCreateConversationAsync(string userId, FoundryAgent agent, CancellationToken cancellationToken)
     {
         var existing =

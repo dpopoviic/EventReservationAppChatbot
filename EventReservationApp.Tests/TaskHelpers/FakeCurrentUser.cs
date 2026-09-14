@@ -22,6 +22,13 @@ public class FakeCurrentUser : ICurrentUser
     public static FakeCurrentUser For(string userId, bool isAdministrator = false) =>
         new() { IsAuthenticated = true, UserId = userId, IsAdministrator = isAdministrator };
 
+    /// <summary>
+    /// Mirrors what the real <c>CurrentUser</c> reports for a request authenticated
+    /// via the MCP service-key scheme (<c>McpServiceKeyAuthenticationHandler</c>):
+    /// authenticated, but with no user-id claim at all.
+    /// </summary>
+    public static FakeCurrentUser Service() => new() { IsAuthenticated = true, UserId = null };
+
     public string RequireUserId() =>
         UserId ?? throw new UnauthorizedAccessException("This operation requires an authenticated user.");
 }
