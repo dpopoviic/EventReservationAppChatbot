@@ -1,5 +1,6 @@
 using EventReservationApp.Data;
 using EventReservationApp.Models.Entities;
+using EventReservationApp.Services.AgentTools;
 using EventReservationApp.Services.Implementations;
 using EventReservationApp.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -53,6 +54,13 @@ builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
 builder.Services.AddScoped<IEventCatalogService, EventCatalogService>();
 builder.Services.AddScoped<IMyReservationsService, MyReservationsService>();
+
+// Plain agent-tool wrapper classes (no MCP attributes) whose [Description]
+// attributes are read by AIFunctionFactory.Create to build tool schemas for
+// the Responses agent. See Services/AgentTools/.
+builder.Services.AddScoped<SearchEventsAgentTool>();
+builder.Services.AddScoped<GetEventAvailabilityAgentTool>();
+builder.Services.AddScoped<ManageMyReservationsAgentTool>();
 // Chatbot service is intentionally isolated behind an interface so the AI
 // provider can be swapped without touching the controller or views. See
 // Services/Interfaces/IChatbotService.cs.
