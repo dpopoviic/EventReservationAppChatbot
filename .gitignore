@@ -1,11 +1,6 @@
-# Build output
-[Bb]in/
-[Oo]bj/
-[Dd]ebug/
-[Rr]elease/
-x64/
-x86/
-Any CPU/
+# .NET build output
+**/[Bb]in/
+**/[Oo]bj/
 
 # Visual Studio
 .vs/
@@ -28,6 +23,7 @@ packages/
 
 # Publish output
 publish/
+**/publish/
 *.publishsettings
 
 # Logs
@@ -59,6 +55,7 @@ Thumbs.db
 
 # Test results / coverage
 TestResults/
+**/TestResults/
 *.trx
 coverage/
 *.coverage
