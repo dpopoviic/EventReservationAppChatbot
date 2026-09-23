@@ -6,10 +6,15 @@
     "LogLevel": {
       "Default": "Information",
       "Microsoft.AspNetCore": "Warning",
-      "Microsoft.EntityFrameworkCore.Database.Command": "Information"
+      "Microsoft.EntityFrameworkCore": "Warning"
     }
   },
-  "FoundrySettings": {
-    "ModelDeploymentName": "gpt-5-mini-2"
+  "AllowedHosts": "*",
+  "RasaSettings": {
+    "BaseUrl": "http://localhost:5005",
+    "AuthToken": "REPLACE_WITH_RASA_AUTH_TOKEN"
+  },
+  "InternalApi": {
+    "ApiKey": "REPLACE_WITH_INTERNAL_API_KEY"
   }
 }

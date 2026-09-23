@@ -62,6 +62,7 @@ coverage/
 *.coveragexml
 
 # Local secrets / environment
+appsettings.json
 appsettings.Development.json
 .env
 .env.*
