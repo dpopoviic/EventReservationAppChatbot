@@ -5,19 +5,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>a1e2c3d4-event-reservation-app</UserSecretsId>
-    <!-- Microsoft.Agents.AI.Foundry's FoundryAgent type is still marked as an evaluation
-         API upstream (OPENAI001), even though it's the current recommended way to connect
-         to an agent you built in the Foundry portal. Suppressing here is intentional. -->
-    <NoWarn>$(NoWarn);OPENAI001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Azure AI Foundry / Microsoft Agent Framework: lets the app call an existing
-         agent (with File Search over your uploaded file) that you already created
-         in the Foundry portal. See Services/Implementations/FoundryChatbotService.cs. -->
-    <PackageReference Include="Azure.AI.Projects" Version="2.1.0-beta.4" />
-    <PackageReference Include="Azure.Identity" Version="1.21.0" />
-    <PackageReference Include="Microsoft.Agents.AI.Foundry" Version="1.20.0-preview.260831.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">

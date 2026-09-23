@@ -1,8 +1,9 @@
 using EventReservationApp.Data;
 using EventReservationApp.Models.Entities;
-using EventReservationApp.Services.AgentTools;
+using EventReservationApp.Services.Auth;
 using EventReservationApp.Services.Implementations;
 using EventReservationApp.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,6 +42,17 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 // ---------------------------------------------------------------------
+// Internal API key auth scheme - used only by the Rasa action server to
+// call the internal agent API on behalf of a signed-in user. Separate from
+// the Identity cookie scheme; the internal controller opts into it
+// explicitly via [Authorize(AuthenticationSchemes = "InternalApiKey")].
+// See Services/Auth/InternalApiKeyHandler.cs.
+// ---------------------------------------------------------------------
+builder.Services.AddAuthentication()
+    .AddScheme<AuthenticationSchemeOptions, InternalApiKeyHandler>(
+        InternalApiKeyHandler.SchemeName, _ => { });
+
+// ---------------------------------------------------------------------
 // Application services (business logic lives here, not in controllers)
 // ---------------------------------------------------------------------
 builder.Services.AddScoped<IEventService, EventService>();
@@ -55,24 +67,15 @@ builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddScoped<IEventCatalogService, EventCatalogService>();
 builder.Services.AddScoped<IMyReservationsService, MyReservationsService>();
 
-// Plain agent-tool wrapper classes (no MCP attributes) whose [Description]
-// attributes are read by AIFunctionFactory.Create to build tool schemas for
-// the Responses agent. See Services/AgentTools/.
-builder.Services.AddScoped<SearchEventsAgentTool>();
-builder.Services.AddScoped<GetEventAvailabilityAgentTool>();
-builder.Services.AddScoped<ManageMyReservationsAgentTool>();
 // Chatbot service is intentionally isolated behind an interface so the AI
 // provider can be swapped without touching the controller or views. See
-// Services/Interfaces/IChatbotService.cs.
+// Services/Interfaces/IChatbotConverationService.cs.
 //
-// FoundryChatbotService calls an existing agent you created in the Microsoft
-// Foundry portal (with File Search over your uploaded file). It's registered
-// as a singleton because it keeps a reusable connection to Foundry plus one
-// chat session per user - see the class for details. To go back to the
-// no-AI placeholder, swap this line for:
-//   builder.Services.AddScoped<IChatbotService, PlaceholderChatbotService>();
-builder.Services.AddSingleton<IChatbotService, FoundryChatbotService>();
-builder.Services.AddScoped<IChatbotConversationService, FoundryChatbotConversationService>();
+// RasaChatbotConversationService talks to a Rasa Pro server (REST channel +
+// tracker API) instead of an in-process agent; the actual tool logic
+// (search events, availability, reservations) is exposed to Rasa's custom
+// actions via the internal API below, not called in-process anymore.
+builder.Services.AddHttpClient<IChatbotConversationService, RasaChatbotConversationService>();
 // ---------------------------------------------------------------------
 // MVC + Razor Pages (Razor Pages are required by the default Identity UI)
 // ---------------------------------------------------------------------

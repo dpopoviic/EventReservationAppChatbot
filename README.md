@@ -181,36 +181,32 @@ These relationships are configured explicitly in `ApplicationDbContext.OnModelCr
   administration links from non-administrators purely for a cleaner UX (see `_Layout.cshtml` and
   `_LoginPartial.cshtml`), but this is not relied upon for security.
 
-## 12. Where to Add Future AI / Chatbot Integration
+## 12. Chatbot / Rasa Integration
 
-The chatbot page (`/Chatbot`) is intentionally isolated so AI can be added later without touching
-the rest of the MVC application:
+The chatbot page (`/Chatbot`) is isolated behind an interface so the conversational backend can be
+swapped without touching the rest of the MVC application:
 
-- `Services/Interfaces/IChatbotService.cs` - the abstraction the controller and future services
-  depend on. **This is the extension point.**
-- `Services/Implementations/PlaceholderChatbotService.cs` - the current no-AI implementation
-  (returns canned replies). Replace or add a sibling implementation (e.g.
-  `OpenAiChatbotService`, `ClaudeChatbotService`) that calls a real AI provider.
-- `Controllers/ChatbotController.cs` - serves the chat page and a `POST /Chatbot/Send` JSON
-  endpoint; it only talks to `IChatbotService`, never to a concrete AI SDK directly.
+- `Services/Interfaces/IChatbotConverationService.cs` - the abstraction the controller depends on.
+  **This is the extension point.**
+- `Services/Implementations/RasaChatbotConversationService.cs` - calls a Rasa Pro server over its
+  REST channel (`webhooks/rest/webhook`) and tracker API. Conversation state lives entirely in
+  Rasa's tracker store, keyed by the application's user id used directly as the Rasa sender id -
+  there is no local conversation/session table.
+- `Controllers/ChatbotController.cs` - serves the chat page and `POST /Chatbot/Send` /
+  `POST /Chatbot/NewConversation`; it only talks to `IChatbotConversationService`, never to Rasa
+  directly.
 - `Views/Chatbot/Index.cshtml` - the chat window UI (message list, input box, send button) that
   calls `POST /Chatbot/Send` via `fetch()`.
+- `Controllers/Api/InternalAgentController.cs` - internal HTTP API, authenticated with a shared
+  secret (`InternalApi:ApiKey`, see `Services/Auth/InternalApiKeyHandler.cs`), that the Rasa
+  project's custom actions (`moj-rasa-agent/actions/actions.py`) call to search events, check
+  availability, and manage the current user's reservations. It is a thin wrapper over
+  `IEventCatalogService` / `IMyReservationsService` - no business logic lives in it or in Rasa.
 
-To integrate a real AI provider later:
+Configuration lives under `RasaSettings` (`BaseUrl`, `AuthToken`) and `InternalApi` (`ApiKey`) in
+`appsettings.json`; put real secret values in user-secrets rather than committing them.
 
-1. Implement `IChatbotService` in a new class, calling your AI provider's SDK/API from
-   `GetReplyAsync`.
-2. Add any provider configuration (API keys, model name, etc.) under a new section in
-   `appsettings.json` (a `ChatbotSettings` placeholder section already exists) and bind it with
-   `IOptions<T>`.
-3. In `Program.cs`, change the DI registration from:
-   ```csharp
-   builder.Services.AddScoped<IChatbotService, PlaceholderChatbotService>();
-   ```
-   to your new implementation. No controller or view changes are required.
-4. If you need conversation history/context, consider adding a `ChatSession`/`ChatMessage`
-   entity and persisting it via EF Core, following the same entity/service/viewmodel pattern
-   used for `Event`/`EventReservation` elsewhere in this project.
+See `moj-rasa-agent/` for the Rasa Pro project itself (flows, domain, NLU data, custom actions).
 
 ## 13. Notable Design Decisions
 
