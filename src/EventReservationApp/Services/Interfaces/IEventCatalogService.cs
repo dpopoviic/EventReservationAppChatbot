@@ -10,5 +10,8 @@ namespace EventReservationApp.Services.Interfaces
         Task<EventAvailabilityDto?> GetEventAvailabilityAsync(
        int eventId,
        CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<EventCandidateDto>> ResolveByNameAsync(
+       string name,
+       CancellationToken cancellationToken = default);
     }
 }

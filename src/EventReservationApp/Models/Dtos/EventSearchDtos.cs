@@ -24,4 +24,6 @@
         public bool IsFull { get; set; }
         public bool CurrentUserHasReservation { get; set; }
     }
+
+    public record EventCandidateDto(int EventId, string Name, DateTime StartDate, string MatchType);
 }

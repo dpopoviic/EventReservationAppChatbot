@@ -78,6 +78,32 @@
                 sendButton.disabled = false;
             }
 
+            // Show the latest messages of the current conversation; the greeting
+            // stays only when there is no history yet.
+            async function loadHistory() {
+                try {
+                    const response = await fetch('@Url.Action("History", "Chatbot")');
+                    if (!response.ok) {
+                        return;
+                    }
+
+                    const messages = await response.json();
+                    // Skip if the user already sent something while history was loading.
+                    if (messages.length === 0 || chatWindow.children.length > 1) {
+                        return;
+                    }
+
+                    chatWindow.innerHTML = '';
+                    messages.forEach(function (m) {
+                        appendMessage(m.sender, m.text);
+                    });
+                } catch (err) {
+                    // History is optional; keep the greeting on failure.
+                }
+            }
+
+            loadHistory();
+
             chatForm.addEventListener('submit', async function (e) {
                 e.preventDefault();
                 const message = chatInput.value.trim();

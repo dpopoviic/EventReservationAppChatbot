@@ -24,6 +24,30 @@ public class ChatbotController : Controller
         return View();
     }
 
+    // How many recent messages the chat page shows when it opens.
+    private const int HistoryMessageCount = 10;
+
+    // GET: /Chatbot/History
+    [HttpGet]
+    public async Task<IActionResult> History(CancellationToken cancellationToken)
+    {
+        var userId =
+            User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Unauthorized();
+        }
+
+        var messages =
+            await _chatbotService.GetRecentMessagesAsync(
+                userId,
+                HistoryMessageCount,
+                cancellationToken);
+
+        return Json(messages);
+    }
+
     // POST: /Chatbot/Send
     [HttpPost]
     [ValidateAntiForgeryToken]

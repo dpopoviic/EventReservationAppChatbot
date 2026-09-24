@@ -1,4 +1,5 @@
 ﻿using EventReservationApp.Data;
+using EventReservationApp.Helpers;
 using EventReservationApp.Models.Dtos;
 using EventReservationApp.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -24,20 +25,6 @@ namespace EventReservationApp.Services.Implementations
 
             var query = _context.Events.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
-            {
-                var term = filter.SearchTerm.Trim().ToLower();
-                query = query.Where(e =>
-                    e.Name.ToLower().Contains(term) ||
-                    e.Description.ToLower().Contains(term));
-            }
-
-            if (!string.IsNullOrWhiteSpace(filter.Location))
-            {
-                var location = filter.Location.Trim().ToLower();
-                query = query.Where(e => e.Location.ToLower().Contains(location));
-            }
-
             if (filter.StartDateFrom.HasValue)
             {
                 query = query.Where(e => e.StartDate >= filter.StartDateFrom.Value);
@@ -45,7 +32,9 @@ namespace EventReservationApp.Services.Implementations
 
             if (filter.StartDateTo.HasValue)
             {
-                query = query.Where(e => e.StartDate <= filter.StartDateTo.Value);
+                // Ukljucuje ceo poslednji dan, i dogadjaje koji pocinju u toku tog dana.
+                var endExclusive = filter.StartDateTo.Value.Date.AddDays(1);
+                query = query.Where(e => e.StartDate < endExclusive);
             }
 
             var results = await query
@@ -64,6 +53,25 @@ namespace EventReservationApp.Services.Implementations
                         e.EventReservations.Any(r => r.UserId == currentUserId)
                 })
                 .ToListAsync(cancellationToken);
+
+            // Transliteracija ne moze da se prevede u SQL, pa se tekst poredi u memoriji.
+            var term = TextNormalizer.Normalize(filter.SearchTerm);
+            if (term.Length > 0)
+            {
+                results = results
+                    .Where(r =>
+                        TextNormalizer.Normalize(r.Name).Contains(term) ||
+                        TextNormalizer.Normalize(r.Description).Contains(term))
+                    .ToList();
+            }
+
+            var location = TextNormalizer.Normalize(filter.Location);
+            if (location.Length > 0)
+            {
+                results = results
+                    .Where(r => TextNormalizer.Normalize(r.Location).Contains(location))
+                    .ToList();
+            }
 
             foreach (var result in results)
             {
@@ -110,6 +118,36 @@ namespace EventReservationApp.Services.Implementations
                 AvailablePlaces = availablePlaces,
                 IsAvailableForReservation = availablePlaces > 0
             };
+        }
+
+        public async Task<IReadOnlyList<EventCandidateDto>> ResolveByNameAsync(
+            string name,
+            CancellationToken cancellationToken = default)
+        {
+            var term = TextNormalizer.Normalize(name);
+            if (term.Length == 0)
+            {
+                return Array.Empty<EventCandidateDto>();
+            }
+
+            // Samo buduci dogadjaji se nude za rezervaciju.
+            // Transliteracija ne moze da se prevede u SQL, pa se poredi u memoriji.
+            var today = DateTime.Today;
+            var events = await _context.Events
+                .Where(e => e.StartDate >= today)
+                .Select(e => new { e.Id, e.Name, e.StartDate })
+                .ToListAsync(cancellationToken);
+
+            var exact = events.Where(e => TextNormalizer.Normalize(e.Name) == term).ToList();
+            var matches = exact.Count > 0
+                ? exact
+                : events.Where(e => TextNormalizer.Normalize(e.Name).Contains(term)).ToList();
+            var matchType = exact.Count > 0 ? "exact" : "contains";
+
+            return matches
+                .OrderBy(e => e.StartDate)
+                .Select(e => new EventCandidateDto(e.Id, e.Name, e.StartDate, matchType))
+                .ToList();
         }
     }
 

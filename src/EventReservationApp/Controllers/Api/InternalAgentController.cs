@@ -45,6 +45,16 @@ public class InternalAgentController : ControllerBase
         return Ok(results);
     }
 
+    // GET /api/internal/events/resolve?name=
+    [HttpGet("events/resolve")]
+    public async Task<ActionResult<IReadOnlyList<EventCandidateDto>>> ResolveEvent(
+        [FromQuery] string name,
+        CancellationToken cancellationToken)
+    {
+        var candidates = await _eventCatalogService.ResolveByNameAsync(name, cancellationToken);
+        return Ok(candidates);
+    }
+
     // GET /api/internal/events/{eventId}/availability
     [HttpGet("events/{eventId:int}/availability")]
     public async Task<ActionResult<EventAvailabilityDto>> GetEventAvailability(
