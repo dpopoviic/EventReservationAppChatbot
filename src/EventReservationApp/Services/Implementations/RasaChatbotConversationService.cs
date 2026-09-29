@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using EventReservationApp.Models.ViewModels;
@@ -16,15 +17,18 @@ public class RasaChatbotConversationService : IChatbotConversationService
 
     private readonly HttpClient _httpClient;
     private readonly ILogger<RasaChatbotConversationService> _logger;
+    private readonly IUserTokenService _userTokenService;
     private readonly string _tokenQuery;
     private readonly string? _trackerConnectionString;
 
     public RasaChatbotConversationService(
         HttpClient httpClient,
         IConfiguration configuration,
+        IUserTokenService userTokenService,
         ILogger<RasaChatbotConversationService> logger)
     {
         _logger = logger;
+        _userTokenService = userTokenService;
 
         // Rasa's SQLTrackerStore database (see tracker_store in the Rasa endpoints.yml).
         // Read-only here; Rasa owns the schema.
@@ -57,21 +61,40 @@ public class RasaChatbotConversationService : IChatbotConversationService
             var payload = new RasaWebhookRequest
             {
                 Sender = userId,
-                Message = message,
-                Metadata = new RasaMessageMetadata { UserId = userId }
+                Message = message
             };
 
-            using var response = await _httpClient.PostAsJsonAsync(
-                $"webhooks/rest/webhook{_tokenQuery}", payload, JsonOptions, cancellationToken);
+            // secure_rest channel (secure_rest_channel.py in the Rasa project): the
+            // signed user token proves the message comes from this app for this
+            // user. Rasa rejects it unless the token's subject equals the sender,
+            // and passes the token on to the custom actions for the internal API.
+            using var request = new HttpRequestMessage(HttpMethod.Post, "webhooks/secure_rest/webhook")
+            {
+                Content = JsonContent.Create(payload, options: JsonOptions)
+            };
+            request.Headers.Authorization = new AuthenticationHeaderValue(
+                "Bearer", _userTokenService.CreateToken(userId));
+
+            using var response = await _httpClient.SendAsync(request, cancellationToken);
 
             response.EnsureSuccessStatusCode();
 
             var botMessages = await response.Content.ReadFromJsonAsync<List<RasaBotMessage>>(
                 JsonOptions, cancellationToken) ?? new List<RasaBotMessage>();
 
+            // Every reply must be addressed to the user who sent the message;
+            // anything else is dropped instead of being shown to this user.
+            var foreignCount = botMessages.Count(m => m.RecipientId != userId);
+            if (foreignCount > 0)
+            {
+                _logger.LogWarning(
+                    "Dropped {Count} Rasa message(s) not addressed to user {UserId}.", foreignCount, userId);
+            }
+
             var reply = string.Join(
                 "\n\n",
                 botMessages
+                    .Where(m => m.RecipientId == userId)
                     .Select(m => m.Text)
                     .Where(text => !string.IsNullOrWhiteSpace(text)));
 
@@ -201,17 +224,13 @@ public class RasaChatbotConversationService : IChatbotConversationService
     {
         public required string Sender { get; init; }
         public required string Message { get; init; }
-        public RasaMessageMetadata? Metadata { get; init; }
-    }
-
-    private sealed class RasaMessageMetadata
-    {
-        [JsonPropertyName("user_id")]
-        public required string UserId { get; init; }
     }
 
     private sealed class RasaBotMessage
     {
+        [JsonPropertyName("recipient_id")]
+        public string? RecipientId { get; init; }
+
         public string? Text { get; init; }
     }
 }

@@ -52,6 +52,10 @@ builder.Services.AddAuthentication()
     .AddScheme<AuthenticationSchemeOptions, InternalApiKeyHandler>(
         InternalApiKeyHandler.SchemeName, _ => { });
 
+// Signs the per-message user token sent to Rasa (and forwarded back by its
+// custom actions), and validates it in InternalApiKeyHandler.
+builder.Services.AddSingleton<IUserTokenService, UserTokenService>();
+
 // ---------------------------------------------------------------------
 // Application services (business logic lives here, not in controllers)
 // ---------------------------------------------------------------------

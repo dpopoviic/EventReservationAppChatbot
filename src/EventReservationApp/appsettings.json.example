@@ -17,5 +17,8 @@
   },
   "InternalApi": {
     "ApiKey": "REPLACE_WITH_INTERNAL_API_KEY"
+  },
+  "UserToken": {
+    "PrivateKeyPem": "REPLACE_WITH_EC_P256_PRIVATE_KEY_PEM"
   }
 }
