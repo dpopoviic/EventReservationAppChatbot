@@ -61,7 +61,8 @@ public class RasaChatbotConversationService : IChatbotConversationService
             var payload = new RasaWebhookRequest
             {
                 Sender = userId,
-                Message = message
+                Message = message,
+                Metadata = new() { ["language"] = "en" }
             };
 
             // secure_rest channel (secure_rest_channel.py in the Rasa project): the
@@ -224,6 +225,7 @@ public class RasaChatbotConversationService : IChatbotConversationService
     {
         public required string Sender { get; init; }
         public required string Message { get; init; }
+        public Dictionary<string, string>? Metadata { get; init; }
     }
 
     private sealed class RasaBotMessage
